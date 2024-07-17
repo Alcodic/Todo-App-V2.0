@@ -1,24 +1,19 @@
-import { useState } from "react";
+import { useRef } from "react";
 import styles from "./AddTodo.module.css";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 function AddTodo({ onNewItem }) {
-  const [todoName, setTodoName] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const todoNameElement = useRef();
+  const dueDateElement = useRef();
 
-  const handleNameChange = (event) => {
-    setTodoName(event.target.value);
-  };
-
-  const handleDateChange = (event) => {
-    setDueDate(event.target.value);
-  };
-
-  const handleAddButtonClicked = () => {
+  const handleAddButtonClicked = (event) => {
     event.preventDefault();
+    const todoName = todoNameElement.current.value;
+    const dueDate = dueDateElement.current.value;
+    console.log(`${todoName} due on: ${dueDate}`);
+    todoNameElement.current.value = "";
+    dueDateElement.current.value = "";
     onNewItem(todoName, dueDate);
-    setDueDate("");
-    setTodoName("");
   };
 
   return (
@@ -28,18 +23,12 @@ function AddTodo({ onNewItem }) {
           <input
             className={styles.input}
             type="text"
+            ref={todoNameElement}
             placeholder="Enter ToDo here"
-            value={todoName}
-            onChange={handleNameChange}
           />
         </div>
         <div className="col-4">
-          <input
-            className={styles.input}
-            type="date"
-            value={dueDate}
-            onChange={handleDateChange}
-          />
+          <input className={styles.input} type="date" ref={dueDateElement} />
         </div>
         <div className="col-2">
           <button type="submit" className="btn btn-success kg-button">
